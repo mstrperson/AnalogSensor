@@ -9,10 +9,11 @@
 #ifndef AnalogSensor_h  // C++ for only include this library once~ every library starts like this.
 #define AnalogSensor_h  // this definition alerts the compiler that this code has been added and
                         // does not need to be re-added if it is included multiple times.
-struct DataPoint
+class DataPoint
 {
     int value;
     DataPoint* next;
+    DataPoint(int value)
 };
 
 class SensorDataQueue

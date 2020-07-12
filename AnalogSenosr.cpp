@@ -8,6 +8,12 @@
 
 #define DEBUG
 
+DataPoint::DataPoint(int v)
+{
+    this->value = v;
+    this->next = NULL;
+}
+
 SensorDataQueue::SensorDataQueue()
 {
 #ifdef DEBUG
@@ -119,9 +125,8 @@ void SensorDataQueue::addDataPoint(int v)
     Serial.print(v);
     Serial.println(") called.");
 #endif
-    DataPoint* dataPoint = new DataPoint();
-    dataPoint->value = v;
-    dataPoint->next = NULL;
+    
+    DataPoint* dataPoint = new DataPoint(v);
 
 #ifdef DEBUG
     Serial.println("Created new DataPoint.");
