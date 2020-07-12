@@ -230,7 +230,7 @@ void SensorDataQueue::addDataPoint(int v)
         while(cur != NULL)
         {
             this->runningAverage += cur->value;
-            cur = cur-next;
+            cur = cur->next;
         }
         // divide by the number of values.
         this->runningAverage /= (float)count;
