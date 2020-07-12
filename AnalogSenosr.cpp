@@ -242,7 +242,7 @@ void SensorDataQueue::addDataPoint(int v)
             cur = cur->next;
         }
         // divide by the number of values.
-        this->runningAverage /= (float)count;
+        this->runningAverage /= queueLength;
     }
 #ifdef DEBUG
     Serial.println("addDataPoint completed.");
