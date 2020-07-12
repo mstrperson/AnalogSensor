@@ -13,8 +13,8 @@ DataPoint::DataPoint(int v)
     this->value = v;
     this->next = NULL;
 #ifdef DEBUG
-    Serial.println(this);
-    Serial.println(this->next);
+    Serial.println((unsigned int)this, HEX);
+    Serial.println((unsigned int)this->next, HEX);
 #endif
 }
 
@@ -28,7 +28,7 @@ SensorDataQueue::SensorDataQueue()
     this->head = NULL;
 
 #ifdef DEBUG
-    Serial.println(this->head);
+    Serial.println((unsigned int)this->head, HEX);
 #endif
 }
 
@@ -41,7 +41,7 @@ SensorDataQueue::SensorDataQueue(int len)
     this->runningAverage = 0;
     this->head=NULL;
 #ifdef DEBUG
-    Serial.println(this->head);
+    Serial.println((unsigned int)this->head, HEX);
 #endif
 }
 
@@ -56,7 +56,7 @@ SensorDataQueue::~SensorDataQueue()
     while(cur != NULL)
     {
 #ifdef DEBUG
-    Serial.println(cur);
+    Serial.println((unsigned int)cur, HEX);
 #endif
         DataPoint* temp = cur;
         cur = cur -> next;
@@ -142,7 +142,7 @@ void SensorDataQueue::addDataPoint(int v)
 
     DataPoint* dataPoint = new DataPoint(v);
 #ifdef DEBUG
-    Serial.println(dataPoint);
+    Serial.println((unsigned int)dataPoint, HEX);
 #endif
 
 #ifdef DEBUG
@@ -156,7 +156,7 @@ void SensorDataQueue::addDataPoint(int v)
         this->head = dataPoint;
         this->runningAverage = v;
 #ifdef DEBUG
-    Serial.println(this->head);
+    Serial.println((unsigned int)this->head, HEX);
 #endif
     }
     else
@@ -171,13 +171,13 @@ void SensorDataQueue::addDataPoint(int v)
         // find the end of the list
         DataPoint* cur = this->head;
 #ifdef DEBUG
-    Serial.println(cur);
+    Serial.println((unsigned int)cur), HEX;
 #endif
         while(cur->next != NULL)
         {
             cur = cur->next;
 #ifdef DEBUG
-    Serial.println(cur);
+    Serial.println((unsigned int)cur, HEX);
 #endif
             count++;
 #ifdef DEBUG
@@ -187,7 +187,7 @@ void SensorDataQueue::addDataPoint(int v)
         }
 
 #ifdef DEBUG
-    Serial.println(cur);
+    Serial.println((unsigned int)cur, HEX);
     Serial.println("items in the list...");
 #endif
 
@@ -195,7 +195,7 @@ void SensorDataQueue::addDataPoint(int v)
         cur->next = dataPoint;
 
 #ifdef DEBUG
-    Serial.println(cur->next);
+    Serial.println((unsigned int)cur->next, HEX);
 #endif
         // check to see if we've exceeded the max length
         // if so, drop the first item in the list until we have the appropriate length
@@ -211,8 +211,8 @@ void SensorDataQueue::addDataPoint(int v)
             count--;
 
 #ifdef DEBUG
-            Serial.println(temp);
-            Serial.println(this->head);
+            Serial.println((unsigned int)temp, HEX);
+            Serial.println((unsigned int)this->head, HEX);
     Serial.println("Deleted the head pointer.");
 
     Serial.println("Computing Running average now...");
