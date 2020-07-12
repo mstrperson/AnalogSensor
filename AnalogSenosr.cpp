@@ -235,16 +235,14 @@ void SensorDataQueue::addDataPoint(int v)
         this->runningAverage = 0;
 
         cur = this->head; // go back to the start...
-        count = 0;
         // add up all the values.
         while(cur != NULL)
         {
             this->runningAverage += cur->value;
-            count++;
             cur = cur->next;
         }
         // divide by the number of values.
-        this->runningAverage /= count;
+        this->runningAverage /= queueLength;
     }
 #ifdef DEBUG
     Serial.println("addDataPoint completed.");

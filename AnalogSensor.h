@@ -9,9 +9,6 @@
 #ifndef AnalogSensor_h  // C++ for only include this library once~ every library starts like this.
 #define AnalogSensor_h  // this definition alerts the compiler that this code has been added and
                         // does not need to be re-added if it is included multiple times.
-
-// DataPoint is a "linked list node"
-// it holds a Value and a Pointer to the next item in the list.
 class DataPoint
 {
 public:
@@ -20,8 +17,6 @@ public:
     DataPoint(int value);
 };
 
-// SensorDataQueue keeps track of a Queue of DataPoints.
-// It holds a particular number of DataPoints and keeps track of the Average value.
 class SensorDataQueue
 {
 public:
@@ -35,7 +30,6 @@ private:
     DataPoint* head;
 };
 
-// AnalogSensor encapsulates the
 class AnalogSensor
 {
 public:
@@ -47,6 +41,11 @@ public:
     AnalogSensor(int pin, int len, float min, float max);
     ~AnalogSensor();
 private:
+    // struct is just a Data Structure.  No methods, only named variables.
+    // this particular structure is a "Linked List Node",
+    // A value with a pointer to the next value in the list.
+
+
     int sensorPin;
     float outputMax;
     float outputMin;
