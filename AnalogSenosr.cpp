@@ -126,8 +126,8 @@ AnalogSensor::~AnalogSensor()
 // get the value from the SensorDataQueue and map it to the expected output range.
 float mapf(float x, float x0, float x1, float y0, float y1)
 {
-    float m = (y1 - y0)/(x1 - x0);
-    float output = (m * (x - x0)) + y0;
+    int overflow = map (x, x0, x1, y0*100, y1*100);
+    int output = overflow / 100;
     return output;
 }
 
