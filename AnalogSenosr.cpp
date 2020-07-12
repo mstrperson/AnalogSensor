@@ -136,7 +136,7 @@ float AnalogSensor::getValue()
 #ifdef DEBUG
     Serial.println("getValue() called.");
 #endif
-    return mapf(data->runningAverage, 0, 1024, outputMin*100, outputMax*100);
+    return mapf(data->runningAverage, 0, 1024, outputMin, outputMax);
 }
 
 
