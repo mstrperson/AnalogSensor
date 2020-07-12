@@ -11,6 +11,7 @@
                         // does not need to be re-added if it is included multiple times.
 class DataPoint
 {
+public:
     int value;
     DataPoint* next;
     DataPoint(int value);
