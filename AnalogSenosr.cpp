@@ -124,13 +124,22 @@ AnalogSensor::~AnalogSensor()
 // *******************************************************
 
 // get the value from the SensorDataQueue and map it to the expected output range.
+float mapf(float x, float x0, float x1, float y0, float y1)
+{
+    float m = (y1 - y0)/(x1 - x0);
+    float output = (m * (x - x0)) + y0;
+    return output;
+}
+
 float AnalogSensor::getValue()
 {
 #ifdef DEBUG
     Serial.println("getValue() called.");
 #endif
-    return map(data->runningAverage, 0, 1024, outputMin, outputMax);
+    return mapf(data->runningAverage, 0, 1024, outputMin*100, outputMax*100);
 }
+
+
 
 void SensorDataQueue::addDataPoint(int v)
 {
