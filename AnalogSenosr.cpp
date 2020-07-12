@@ -166,7 +166,7 @@ void SensorDataQueue::addDataPoint(int v)
 #endif
 
         // counter going to be used later...
-        int count = 0;
+        int count = 1;
 
         // find the end of the list
         DataPoint* cur = this->head;
@@ -187,6 +187,7 @@ void SensorDataQueue::addDataPoint(int v)
         }
 
 #ifdef DEBUG
+    Serial.print(count);
     Serial.println((unsigned int)cur, HEX);
     Serial.println("items in the list...");
 #endif
