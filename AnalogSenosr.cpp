@@ -171,7 +171,7 @@ void SensorDataQueue::addDataPoint(int v)
         // find the end of the list
         DataPoint* cur = this->head;
 #ifdef DEBUG
-    Serial.println((unsigned int)cur), HEX;
+    Serial.println((unsigned int)cur, HEX);
 #endif
         while(cur->next != NULL)
         {
