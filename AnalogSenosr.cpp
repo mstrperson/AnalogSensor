@@ -12,6 +12,10 @@ DataPoint::DataPoint(int v)
 {
     this->value = v;
     this->next = NULL;
+#ifdef DEBUG
+    Serial.println(this);
+    Serial.println(this->next);
+#endif
 }
 
 SensorDataQueue::SensorDataQueue()
@@ -22,6 +26,10 @@ SensorDataQueue::SensorDataQueue()
     this->queueLength = 25;
     this->runningAverage = 0;
     this->head = NULL;
+
+#ifdef DEBUG
+    Serial.println(this->head);
+#endif
 }
 
 SensorDataQueue::SensorDataQueue(int len)
@@ -32,6 +40,9 @@ SensorDataQueue::SensorDataQueue(int len)
     this->queueLength = len;
     this->runningAverage = 0;
     this->head=NULL;
+#ifdef DEBUG
+    Serial.println(this->head);
+#endif
 }
 
 // Clean up that linked list memory!
@@ -44,6 +55,9 @@ SensorDataQueue::~SensorDataQueue()
     DataPoint* cur = head;
     while(cur != NULL)
     {
+#ifdef DEBUG
+    Serial.println(cur);
+#endif
         DataPoint* temp = cur;
         cur = cur -> next;
         delete temp;
@@ -127,6 +141,9 @@ void SensorDataQueue::addDataPoint(int v)
 #endif
 
     DataPoint* dataPoint = new DataPoint(v);
+#ifdef DEBUG
+    Serial.println(dataPoint);
+#endif
 
 #ifdef DEBUG
     Serial.println("Created new DataPoint.");
@@ -138,6 +155,9 @@ void SensorDataQueue::addDataPoint(int v)
 #endif
         this->head = dataPoint;
         this->runningAverage = v;
+#ifdef DEBUG
+    Serial.println(this->head);
+#endif
     }
     else
     {
@@ -150,9 +170,15 @@ void SensorDataQueue::addDataPoint(int v)
 
         // find the end of the list
         DataPoint* cur = this->head;
+#ifdef DEBUG
+    Serial.println(cur);
+#endif
         while(cur->next != NULL)
         {
             cur = cur->next;
+#ifdef DEBUG
+    Serial.println(cur);
+#endif
             count++;
 #ifdef DEBUG
     Serial.print(count);
@@ -161,12 +187,16 @@ void SensorDataQueue::addDataPoint(int v)
         }
 
 #ifdef DEBUG
+    Serial.println(cur);
     Serial.println("items in the list...");
 #endif
 
         // stick the new datapoint on the end
         cur->next = dataPoint;
 
+#ifdef DEBUG
+    Serial.println(cur->next);
+#endif
         // check to see if we've exceeded the max length
         // if so, drop the first item in the list until we have the appropriate length
         while(count > queueLength)
@@ -181,7 +211,10 @@ void SensorDataQueue::addDataPoint(int v)
             count--;
 
 #ifdef DEBUG
+            Serial.println(temp);
+            Serial.println(this->head);
     Serial.println("Deleted the head pointer.");
+
     Serial.println("Computing Running average now...");
 #endif
         }
