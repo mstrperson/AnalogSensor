@@ -15,6 +15,7 @@ SensorDataQueue::SensorDataQueue()
 #endif
     this->queueLength = 25;
     this->runningAverage = 0;
+    this->head = NULL;
 }
 
 SensorDataQueue::SensorDataQueue(int len)
@@ -24,6 +25,7 @@ SensorDataQueue::SensorDataQueue(int len)
 #endif
     this->queueLength = len;
     this->runningAverage = 0;
+    this->head=NULL;
 }
 
 // Clean up that linked list memory!
@@ -119,6 +121,7 @@ void SensorDataQueue::addDataPoint(int v)
 #endif
     DataPoint* dataPoint = new DataPoint();
     dataPoint->value = v;
+    dataPoint->next = NULL;
 
 #ifdef DEBUG
     Serial.println("Created new DataPoint.");
