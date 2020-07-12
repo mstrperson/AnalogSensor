@@ -214,14 +214,15 @@ void SensorDataQueue::addDataPoint(int v)
 #ifdef DEBUG
             Serial.println((unsigned int)temp, HEX);
             Serial.println((unsigned int)this->head, HEX);
-    Serial.println("Deleted the head pointer.");
-
-    Serial.println("Computing Running average now...");
+            Serial.println("Deleted the head pointer.");
 #endif
         }
 
         // now compute the running average
 
+#ifdef DEBUG
+        Serial.println("Computing Running average now...");
+#endif
         this->runningAverage = 0;
 
         cur = this->head; // go back to the start...
@@ -229,6 +230,7 @@ void SensorDataQueue::addDataPoint(int v)
         while(cur != NULL)
         {
             this->runningAverage += cur->value;
+            cur = cur-next;
         }
         // divide by the number of values.
         this->runningAverage /= (float)count;
