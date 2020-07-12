@@ -6,7 +6,7 @@
 #include "AnalogSensor.h"
 #include <Arduino.h>
 
-#define DEBUG
+//#define DEBUG
 
 DataPoint::DataPoint(int v)
 {
