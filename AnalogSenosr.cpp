@@ -6,6 +6,8 @@
 #include "AnalogSensor.h"
 #include <Arduino.h>
 
+#define DEBUG
+
 SensorDataQueue::SensorDataQueue()
 {
 #ifdef DEBUG
