@@ -13,7 +13,7 @@ class DataPoint
 {
     int value;
     DataPoint* next;
-    DataPoint(int value)
+    DataPoint(int value);
 };
 
 class SensorDataQueue

@@ -125,7 +125,7 @@ void SensorDataQueue::addDataPoint(int v)
     Serial.print(v);
     Serial.println(") called.");
 #endif
-    
+
     DataPoint* dataPoint = new DataPoint(v);
 
 #ifdef DEBUG
