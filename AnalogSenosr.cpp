@@ -123,7 +123,7 @@ AnalogSensor::~AnalogSensor()
 // yep.  there's only three of them!
 // *******************************************************
 
-// get the value from the SensorDataQueue and map it to the expected output range.
+// Helper method, calculate the map function with float values instead of int.
 float mapf(float x, float x0, float x1, float y0, float y1)
 {
     float m = (y1 - y0)/(x1 - x0);
@@ -131,6 +131,7 @@ float mapf(float x, float x0, float x1, float y0, float y1)
     return output;
 }
 
+// get the value from the SensorDataQueue and map it to the expected output range.
 float AnalogSensor::getValue()
 {
 #ifdef DEBUG
