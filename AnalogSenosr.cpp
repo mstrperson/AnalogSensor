@@ -6,13 +6,13 @@
 #include "AnalogSensor.h"
 #include <Arduino.h>
 
-//#define DEBUG
+#define DEBUG 1
 
 DataPoint::DataPoint(int v)
 {
     this->value = v;
     this->next = NULL;
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println((unsigned int)this, HEX);
     Serial.println((unsigned int)this->next, HEX);
 #endif
@@ -20,27 +20,27 @@ DataPoint::DataPoint(int v)
 
 SensorDataQueue::SensorDataQueue()
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Initializing default SensorDataQueue...");
 #endif
     this->queueLength = 25;
     this->runningAverage = 0;
     this->head = NULL;
 
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println((unsigned int)this->head, HEX);
 #endif
 }
 
 SensorDataQueue::SensorDataQueue(int len)
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Initializing custom SensorDataQueue...");
 #endif
     this->queueLength = len;
     this->runningAverage = 0;
     this->head=NULL;
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println((unsigned int)this->head, HEX);
 #endif
 }
@@ -48,14 +48,14 @@ SensorDataQueue::SensorDataQueue(int len)
 // Clean up that linked list memory!
 SensorDataQueue::~SensorDataQueue()
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("destroying SensorDataQueue...");
 #endif
 
     DataPoint* cur = head;
     while(cur != NULL)
     {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println((unsigned int)cur, HEX);
 #endif
         DataPoint* temp = cur;
@@ -68,7 +68,7 @@ SensorDataQueue::~SensorDataQueue()
 // Pin number must be provided, all other settings have default values.
 AnalogSensor::AnalogSensor(int pin)
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Initializing default AnalogSensor...");
 #endif
     this->sensorPin = pin;
@@ -82,7 +82,7 @@ AnalogSensor::AnalogSensor(int pin)
 }
 AnalogSensor::AnalogSensor(int pin, float min, float max)
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Initializing AnalogSensor...");
 #endif
     this->sensorPin = pin;
@@ -96,7 +96,7 @@ AnalogSensor::AnalogSensor(int pin, float min, float max)
 }
 AnalogSensor::AnalogSensor(int pin, int len)
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Initializing AnalogSensor...");
 #endif
     this->sensorPin = pin;
@@ -110,7 +110,7 @@ AnalogSensor::AnalogSensor(int pin, int len)
 }
 AnalogSensor::AnalogSensor(int pin, int len, float min, float max)
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Initializing AnalogSensor...");
 #endif
     this->sensorPin = pin;
@@ -126,7 +126,7 @@ AnalogSensor::AnalogSensor(int pin, int len, float min, float max)
 // Destructor Method--make sure to free up all the manually allocated memory.
 AnalogSensor::~AnalogSensor()
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Destroying AnalogSensor...");
 #endif
     delete data;
@@ -150,7 +150,7 @@ float mapf(float x, float x0, float x1, float y0, float y1)
 // get the value from the SensorDataQueue and map it to the expected output range.
 float AnalogSensor::getValue()
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("getValue() called.");
 #endif
     return mapf(data->runningAverage, inputMin, inputMax, outputMin, outputMax);
@@ -160,34 +160,34 @@ float AnalogSensor::getValue()
 
 void SensorDataQueue::addDataPoint(int v)
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.print("addDataPoint(");
     Serial.print(v);
     Serial.println(") called.");
 #endif
 
     DataPoint* dataPoint = new DataPoint(v);
-#ifdef DEBUG
+#if DEBUG > 2
     Serial.println((unsigned int)dataPoint, HEX);
 #endif
 
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Created new DataPoint.");
 #endif
     if(this->head == NULL)
     {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("This is the first DataPoint in the list~!");
 #endif
         this->head = dataPoint;
         this->runningAverage = v;
-#ifdef DEBUG
+#if DEBUG > 2
     Serial.println((unsigned int)this->head, HEX);
 #endif
     }
     else
     {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Adding a new DataPoint to the Queue");
 #endif
 
@@ -196,23 +196,23 @@ void SensorDataQueue::addDataPoint(int v)
 
         // find the end of the list
         DataPoint* cur = this->head;
-#ifdef DEBUG
+#if DEBUG > 2
     Serial.println((unsigned int)cur, HEX);
 #endif
         while(cur->next != NULL)
         {
             cur = cur->next;
-#ifdef DEBUG
-    Serial.println((unsigned int)cur, HEX);
+#if DEBUG > 2
+            Serial.println((unsigned int)cur, HEX);
 #endif
             count++;
-#ifdef DEBUG
-    Serial.print(count);
-    Serial.print("\t");
+#if DEBUG > 2
+            Serial.print(count);
+            Serial.print("\t");
 #endif
         }
 
-#ifdef DEBUG
+#if DEBUG > 2
     Serial.print(count);
     Serial.println((unsigned int)cur, HEX);
     Serial.println("items in the list...");
@@ -221,14 +221,14 @@ void SensorDataQueue::addDataPoint(int v)
         // stick the new datapoint on the end
         cur->next = dataPoint;
 
-#ifdef DEBUG
+#if DEBUG > 2
     Serial.println((unsigned int)cur->next, HEX);
 #endif
         // check to see if we've exceeded the max length
         // if so, drop the first item in the list until we have the appropriate length
         while(count > queueLength)
         {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("Queue is too long!");
 #endif
 
@@ -237,7 +237,7 @@ void SensorDataQueue::addDataPoint(int v)
             delete temp; // always clean up after yourself!
             count--;
 
-#ifdef DEBUG
+#if DEBUG > 2
             Serial.println((unsigned int)temp, HEX);
             Serial.println((unsigned int)this->head, HEX);
             Serial.println("Deleted the head pointer.");
@@ -246,7 +246,7 @@ void SensorDataQueue::addDataPoint(int v)
 
         // now compute the running average
 
-#ifdef DEBUG
+#if DEBUG > 1
         Serial.println("Computing Running average now...");
 #endif
         this->runningAverage = 0;
@@ -263,14 +263,14 @@ void SensorDataQueue::addDataPoint(int v)
         // divide by the number of values.
         this->runningAverage /= count;
     }
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("addDataPoint completed.");
 #endif
 }
 
 void AnalogSensor::update()
 {
-#ifdef DEBUG
+#if DEBUG > 1
     Serial.println("updating the sensor reading...");
 #endif
 
@@ -290,7 +290,7 @@ void AnalogSensor::calibrate(unsigned long ms)
     long startTime = millis();
     long currentTime = startTime;
 
-#ifdef DEBUG
+#if DEBUG > 0
     Serial.print("Beginning Calibration at ");
     Serial.print(startTime);
     Serial.println(" ms");
@@ -310,7 +310,7 @@ void AnalogSensor::calibrate(unsigned long ms)
         // check the clock
         currentTime = millis();
 
-#ifdef DEBUG
+#if DEBUG > 0
         Serial.println("========================");
         Serial.print("[ ");
         Serial.print(this->inputMin);
@@ -323,7 +323,7 @@ void AnalogSensor::calibrate(unsigned long ms)
         // this is ignoring the possibility that millis might roll over
         // because that is unlikely to happen while youre calibrating the sensor.
     }
-#ifdef DEBUG
+#if DEBUG > 0
     Serial.println("=======================");
     Serial.println("Calibration complete!");
 #endif
