@@ -20,6 +20,11 @@ AnalogSensor ldr(A0);
 void setup() 
 {
   Serial.begin(9600);
+  
+  // calibrate the sensor for 30 seconds
+  Serial.println("Calibration: Shine a bright light on the sensor and cover the sensor.");
+  ldr.calibrate();
+
   Serial.println("RawData\tSensorValue");
 }
 
