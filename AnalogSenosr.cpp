@@ -74,6 +74,10 @@ AnalogSensor::AnalogSensor(int pin)
     this->sensorPin = pin;
     this->outputMin = 0;
     this->outputMax = 1024;
+
+    this->inputMin = 0;
+    this->inputMax = 1024;
+
     this->data = new SensorDataQueue();
 }
 AnalogSensor::AnalogSensor(int pin, float min, float max)
@@ -84,6 +88,10 @@ AnalogSensor::AnalogSensor(int pin, float min, float max)
     this->sensorPin = pin;
     this->outputMin = min;
     this->outputMax = max;
+
+    this->inputMin = 0;
+    this->inputMax = 1024;
+
     this->data = new SensorDataQueue();
 }
 AnalogSensor::AnalogSensor(int pin, int len)
@@ -94,6 +102,10 @@ AnalogSensor::AnalogSensor(int pin, int len)
     this->sensorPin = pin;
     this->outputMin = 0;
     this->outputMax = 1024;
+
+    this->inputMin = 0;
+    this->inputMax = 1024;
+
     this->data = new SensorDataQueue(len);
 }
 AnalogSensor::AnalogSensor(int pin, int len, float min, float max)
@@ -104,6 +116,10 @@ AnalogSensor::AnalogSensor(int pin, int len, float min, float max)
     this->sensorPin = pin;
     this->outputMin = min;
     this->outputMax = max;
+
+    this->inputMin = 0;
+    this->inputMax = 1024;
+
     this->data = new SensorDataQueue(len);
 }
 
@@ -137,7 +153,7 @@ float AnalogSensor::getValue()
 #ifdef DEBUG
     Serial.println("getValue() called.");
 #endif
-    return mapf(data->runningAverage, 0, 1024, outputMin, outputMax);
+    return mapf(data->runningAverage, inputMin, inputMax, outputMin, outputMax);
 }
 
 
@@ -260,4 +276,55 @@ void AnalogSensor::update()
 
     int value = analogRead(sensorPin);
     data->addDataPoint(value);
+}
+
+// Default calibration period is 30 seconds.
+void AnalogSensor::calibrate()
+{
+    this->calibrate(30000);
+}
+
+// Calibrate the sensor for a given period of time (ms).
+void AnalogSensor::calibrate(unsigned long ms)
+{
+    long startTime = millis();
+    long currentTime = startTime;
+
+#ifdef DEBUG
+    Serial.print("Beginning Calibration at ");
+    Serial.print(startTime);
+    Serial.println(" ms");
+#endif
+
+    this->inputMin = analogRead(this->sensorPin);
+    this->inputMax = this->inputMin+1;
+
+    while(currentTime - startTime < ms)
+    {
+        int v = analogRead(this->sensorPin);
+        // move minimum down if this reading is lower...
+        if(v < this -> inputMin)    this->inputMin = v;
+        // move maximum up if this reading is higher...
+        if(v > this -> inputMax)    this->inputMax = v+1;
+
+        // check the clock
+        currentTime = millis();
+
+#ifdef DEBUG
+        Serial.println("========================");
+        Serial.print("[ ");
+        Serial.print(this->inputMin);
+        Serial.print(", ");
+        Serial.print(this->inputMax);
+        Serial.println(" )");
+#endif
+
+        delay(20);
+        // this is ignoring the possibility that millis might roll over
+        // because that is unlikely to happen while youre calibrating the sensor.
+    }
+#ifdef DEBUG
+    Serial.println("=======================");
+    Serial.println("Calibration complete!");
+#endif
 }

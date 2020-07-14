@@ -15,8 +15,12 @@
 class DataPoint
 {
 public:
+    // value stored in this DataPoint
     int value;
+    // pointer to the next DataPoint in this list.
     DataPoint* next;
+
+    // Constuctor, initializes DataPoint with a value and NULL for the next ptr.
     DataPoint(int value);
 };
 
@@ -26,12 +30,21 @@ class SensorDataQueue
 {
 public:
     float runningAverage;
+
+    // Add a datapoint to the Queue and update the running average.
     void addDataPoint(int v);
+
+    // constructors/destuctors.
     SensorDataQueue();
     SensorDataQueue(int len);
     ~SensorDataQueue();
 private:
+    // maximum length of this queue.
+    // once the max length is reached, the addDataPoint method drops the *head after
+    // adding the new datapoint to the queue
     int queueLength;
+
+    // Pointer to the first item in the Queue.
     DataPoint* head;
 };
 
@@ -39,17 +52,37 @@ private:
 class AnalogSensor
 {
 public:
+    // calibrate the sensor for 30 seconds
+    void calibrate();
+
+    // calibrate the sensor for a specified number of milliseconds.
+    void calibrate(unsigned long ms);
+
+    // Get the Sensor running average mapped to the configured output range.
     float getValue();
+
+    // Update the sensor data with a new DataPoint.
     void update();
+
+    // constructors and destructor.
     AnalogSensor(int pin);
     AnalogSensor(int pin, float min, float max);
     AnalogSensor(int pin, int len);
     AnalogSensor(int pin, int len, float min, float max);
     ~AnalogSensor();
 private:
+    // Analog pin the sensor is connected to.
     int sensorPin;
+
+    // calibrated sensor input range
+    int inputMin;
+    int inputMax;
+
+    // defined output range.
     float outputMax;
     float outputMin;
+
+    // pointer to the DataQueue where sensor data is calculated.
     SensorDataQueue* data;
 };
 
