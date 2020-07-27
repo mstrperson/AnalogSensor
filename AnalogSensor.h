@@ -10,6 +10,8 @@
 #define AnalogSensor_h  // this definition alerts the compiler that this code has been added and
                         // does not need to be re-added if it is included multiple times.
 
+float mapf(float a, float in_min, float in_max, float out_min, float out_max);
+
 // DataPoint is a "linked list node"
 // it holds a Value and a Pointer to the next item in the list.
 class DataPoint
